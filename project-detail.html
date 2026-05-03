@@ -265,16 +265,110 @@ body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #fff; line-
     <div class="modal-content">
         <button class="close-modal" aria-label="Close">&times;</button>
         
-        <section class="contact-section" style="padding: 2rem 0;">
-            <h2>Start Your Project</h2>
-            <p style="color: #888; margin-bottom: 1.5rem;">Tell us your vision, and let's make it happen.</p>
-            <form id="modal-contact-form" class="modalform">
-                <input type="text" placeholder="Name" required>
-                <input type="email" placeholder="Email" required>
-                <textarea placeholder="Tell us about your project" rows="6" ></textarea>
-                <button type="submit" class="submit-btn">Send Inquiry</button>
-            </form>
-        </section>
+        <section class="contact-section">
+  <h2>Contact Us</h2>
+  <p>Send us a message and we'll get right back to you.</p>
+
+  <form action="https://formspree.io/f/xqeneowj" method="POST" id="contact-form">
+    <input type="email" name="email" placeholder="Your email" required>
+    <textarea name="message" rows="5" placeholder="Your message" required></textarea>
+    <button type="submit" class="submit-btn" id="submit-btn">Send</button>
+  </form>
+</section>
+
+<style>
+  .contact-section { 
+    padding: 5rem 2rem; 
+    max-width: 600px; 
+    margin: 0 auto; 
+    text-align: center; 
+  }
+  
+  #contact-form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1rem; 
+    margin-top: 2rem; 
+  }
+  
+  input, textarea { 
+    padding: 1rem; 
+    background: #1a1a1a; 
+    border: 1px solid #333; 
+    color: white; 
+    border-radius: 4px; 
+    font-family: inherit;
+  }
+  
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #555;
+  }
+
+  .submit-btn { 
+    padding: 1rem; 
+    background: #fff; 
+    border: none; 
+    cursor: pointer; 
+    font-weight: bold; 
+    transition: 0.3s; 
+    border-radius: 4px;
+  }
+  
+  .submit-btn:hover { 
+    background: #ccc; 
+  }
+
+  .submit-btn:disabled {
+    background: #555;
+    color: #888;
+    cursor: not-allowed;
+  }
+</style>
+
+<script>
+  const contactForm = document.getElementById('contact-form');
+  const submitBtn = document.getElementById('submit-btn');
+
+  contactForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // Stops the page from redirecting
+
+    // Change button text and disable it while sending
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    // Collect the form data
+    const formData = new FormData(contactForm);
+
+    // Send the data to Formspree in the background
+    fetch(contactForm.action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        // Success! Show your alert and clear the form
+        alert('Thank you! Your message has been sent.');
+        contactForm.reset();
+      } else {
+        // Formspree error
+        alert('Oops! There was a problem submitting your form.');
+      }
+    })
+    .catch(error => {
+      // Network error
+      alert('Oops! There was a problem submitting your form.');
+    })
+    .finally(() => {
+      // Reset the button state
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send';
+    });
+  });
+</script>
     </div>
 </div>
 
